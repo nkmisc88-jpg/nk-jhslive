@@ -4,7 +4,7 @@ import sys
 import urllib.parse
 import urllib.request
 
-USER_TOKEN = os.getenv("HOTSTAR_USER_TOKEN", "")
+USER_TOKEN = os.getenv("HOTSTAR_USER_TOKEN", "").strip()
 USER_AGENT = "Hotstar;in.startv.hotstar.dplus.tv/26.05.10.2 (Android/14; tv)"
 
 # Base API endpoint with standard Android TV client capabilities
