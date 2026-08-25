@@ -4,6 +4,7 @@ import sys
 import urllib.parse
 import urllib.request
 
+# The .strip() here removes any accidental spaces or newlines from your secret token
 USER_TOKEN = os.getenv("HOTSTAR_USER_TOKEN", "").strip()
 USER_AGENT = "Hotstar;in.startv.hotstar.dplus.tv/26.05.10.2 (Android/14; tv)"
 
