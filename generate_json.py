@@ -1,16 +1,17 @@
-from datetime import datetime
 import json
 import os
 import re
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
+from datetime import datetime
 
-# Read token securely from GitHub Actions Secrets
+# Read token securely from GitHub Actions Secrets (or fallback to hardcoded if testing)
 USER_TOKEN = os.getenv("HOTSTAR_USER_TOKEN", "").strip()
 
-# Hardcoded Free Indian Proxy (from spys.one)
-PROXY_URL = "http://151.185.59.19:8080"
+# Proxy configuration (change or set via GitHub Secrets)
+PROXY_URL = os.getenv("INDIAN_PROXY_URL", "http://151.185.59.19:8080").strip()
 USER_AGENT = "Hotstar;in.startv.hotstar.dplus.tv/26.05.10.2 (Android/14; tv)"
 
 # Base API endpoint
@@ -72,20 +73,50 @@ def build_image_url(path):
 
 def fetch_hotstar_data():
     req = urllib.request.Request(API_URL, headers=HEADERS)
-    
-    # Route traffic through the free proxy
+
+    # Route through proxy if set
     if PROXY_URL:
-        proxy_support = urllib.request.ProxyHandler({
-            'http': PROXY_URL,
-            'https': PROXY_URL
-        })
+        proxy_support = urllib.request.ProxyHandler(
+            {"http": PROXY_URL, "https": PROXY_URL}
+        )
         opener = urllib.request.build_opener(proxy_support)
         urllib.request.install_opener(opener)
-        print(f"Routing request through Indian Proxy: {PROXY_URL}")
+        print(
+            f"Routing request through Indian Proxy: {PROXY_URL}",
+            flush=True,
+        )
 
-    # Set a 15-second timeout in case the free proxy is slow or dead
-    with urllib.request.urlopen(req, timeout=15) as response:
-        return json.loads(response.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(req, timeout=20) as response:
+            raw_bytes = response.read()
+            raw_text = raw_bytes.decode("utf-8", errors="ignore")
+
+            try:
+                return json.loads(raw_text)
+            except json.JSONDecodeError as err:
+                print(
+                    "\n❌ JSON Decode Error: Response was not valid JSON.",
+                    flush=True,
+                )
+                print("--- RESPONSE SNIPPET (FIRST 1000 CHARS) ---", flush=True)
+                print(raw_text[:1000], flush=True)
+                print("-------------------------------------------", flush=True)
+                sys.exit(1)
+
+    except urllib.error.HTTPError as err:
+        raw_text = err.read().decode("utf-8", errors="ignore")
+        print(f"\n❌ HTTP Error {err.code}: {err.reason}", flush=True)
+        print("--- ERROR RESPONSE BODY ---", flush=True)
+        print(raw_text[:1000], flush=True)
+        print("---------------------------", flush=True)
+        sys.exit(1)
+
+    except urllib.error.URLError as err:
+        print(
+            f"\n❌ Network / Proxy Connection Failed: {err.reason}",
+            flush=True,
+        )
+        sys.exit(1)
 
 
 def parse_items(raw_json):
@@ -220,12 +251,8 @@ def parse_items(raw_json):
 
 
 def main():
-    print("Fetching live matches from Hotstar...")
-    try:
-        raw_data = fetch_hotstar_data()
-    except Exception as e:
-        print(f"Error fetching data: {e}", file=sys.stderr)
-        sys.exit(1)
+    print("Fetching live matches from Hotstar...", flush=True)
+    raw_data = fetch_hotstar_data()
 
     items = parse_items(raw_data)
 
@@ -248,7 +275,10 @@ def main():
     with open(output_filename, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 
-    print(f"Saved {len(items)} live events to {output_filename}")
+    print(
+        f"Saved {len(items)} live events to {output_filename}",
+        flush=True,
+    )
 
 
 if __name__ == "__main__":
