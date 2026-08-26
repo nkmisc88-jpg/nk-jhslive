@@ -7,14 +7,20 @@ import urllib.parse
 import urllib.request
 from datetime import datetime
 
-# Read token securely from GitHub Actions Secrets (or fallback to hardcoded if testing)
 USER_TOKEN = os.getenv("HOTSTAR_USER_TOKEN", "").strip()
-
-# Proxy configuration (change or set via GitHub Secrets)
-PROXY_URL = os.getenv("INDIAN_PROXY_URL", "http://151.185.59.19:8080").strip()
 USER_AGENT = "Hotstar;in.startv.hotstar.dplus.tv/26.05.10.2 (Android/14; tv)"
 
-# Base API endpoint
+# Pool of candidate Indian proxies from your spys.one list
+PROXY_POOL = [
+    "http://219.65.73.80:80",
+    "http://164.52.213.118:8080",
+    "http://164.52.216.71:8080",
+    "http://140.245.238.56:53",
+    "http://103.246.194.251:3128",
+    "http://103.171.12.2:8080",
+    "http://216.48.180.178:8080",
+]
+
 API_URL = (
     "https://www.hotstar.com/api/internal/bff/v2/slugs/in/browse/editorial/best-in-sports/6517?"
     "client_capabilities="
@@ -74,49 +80,26 @@ def build_image_url(path):
 def fetch_hotstar_data():
     req = urllib.request.Request(API_URL, headers=HEADERS)
 
-    # Route through proxy if set
-    if PROXY_URL:
+    for proxy in PROXY_POOL:
+        print(f"Trying Indian proxy: {proxy}...", flush=True)
         proxy_support = urllib.request.ProxyHandler(
-            {"http": PROXY_URL, "https": PROXY_URL}
+            {"http": proxy, "https": proxy}
         )
         opener = urllib.request.build_opener(proxy_support)
-        urllib.request.install_opener(opener)
-        print(
-            f"Routing request through Indian Proxy: {PROXY_URL}",
-            flush=True,
-        )
 
-    try:
-        with urllib.request.urlopen(req, timeout=20) as response:
-            raw_bytes = response.read()
-            raw_text = raw_bytes.decode("utf-8", errors="ignore")
+        try:
+            with opener.open(req, timeout=10) as response:
+                raw_bytes = response.read()
+                raw_text = raw_bytes.decode("utf-8", errors="ignore")
+                data = json.loads(raw_text)
+                print(f"✅ Success with proxy: {proxy}", flush=True)
+                return data
+        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, json.JSONDecodeError) as e:
+            print(f"⚠️ Proxy failed ({proxy}): {e}", flush=True)
+            continue
 
-            try:
-                return json.loads(raw_text)
-            except json.JSONDecodeError as err:
-                print(
-                    "\n❌ JSON Decode Error: Response was not valid JSON.",
-                    flush=True,
-                )
-                print("--- RESPONSE SNIPPET (FIRST 1000 CHARS) ---", flush=True)
-                print(raw_text[:1000], flush=True)
-                print("-------------------------------------------", flush=True)
-                sys.exit(1)
-
-    except urllib.error.HTTPError as err:
-        raw_text = err.read().decode("utf-8", errors="ignore")
-        print(f"\n❌ HTTP Error {err.code}: {err.reason}", flush=True)
-        print("--- ERROR RESPONSE BODY ---", flush=True)
-        print(raw_text[:1000], flush=True)
-        print("---------------------------", flush=True)
-        sys.exit(1)
-
-    except urllib.error.URLError as err:
-        print(
-            f"\n❌ Network / Proxy Connection Failed: {err.reason}",
-            flush=True,
-        )
-        sys.exit(1)
+    print("❌ All proxies in the pool failed.", flush=True)
+    sys.exit(1)
 
 
 def parse_items(raw_json):
@@ -275,10 +258,7 @@ def main():
     with open(output_filename, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 
-    print(
-        f"Saved {len(items)} live events to {output_filename}",
-        flush=True,
-    )
+    print(f"Saved {len(items)} live events to {output_filename}", flush=True)
 
 
 if __name__ == "__main__":
