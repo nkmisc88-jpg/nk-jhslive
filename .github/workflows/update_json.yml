@@ -2,8 +2,8 @@ name: Update Hotstar Live JSON
 
 on:
   schedule:
-    # Runs every 4 hours automatically
-    - cron: '0 */4 * * *'
+    # Runs every 30 minutes automatically
+    - cron: '*/30 * * * *'
   workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
