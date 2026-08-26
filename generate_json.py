@@ -8,6 +8,9 @@ import urllib.request
 
 # Read token securely from GitHub Actions Secrets
 USER_TOKEN = os.getenv("HOTSTAR_USER_TOKEN", "").strip()
+
+# Hardcoded Free Indian Proxy (from spys.one)
+PROXY_URL = "http://151.185.59.19:8080"
 USER_AGENT = "Hotstar;in.startv.hotstar.dplus.tv/26.05.10.2 (Android/14; tv)"
 
 # Base API endpoint
@@ -69,7 +72,19 @@ def build_image_url(path):
 
 def fetch_hotstar_data():
     req = urllib.request.Request(API_URL, headers=HEADERS)
-    with urllib.request.urlopen(req) as response:
+    
+    # Route traffic through the free proxy
+    if PROXY_URL:
+        proxy_support = urllib.request.ProxyHandler({
+            'http': PROXY_URL,
+            'https': PROXY_URL
+        })
+        opener = urllib.request.build_opener(proxy_support)
+        urllib.request.install_opener(opener)
+        print(f"Routing request through Indian Proxy: {PROXY_URL}")
+
+    # Set a 15-second timeout in case the free proxy is slow or dead
+    with urllib.request.urlopen(req, timeout=15) as response:
         return json.loads(response.read().decode("utf-8"))
 
 
