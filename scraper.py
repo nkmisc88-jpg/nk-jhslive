@@ -2,7 +2,7 @@ import asyncio
 import datetime
 from playwright.async_api import async_playwright
 
-TARGET_URL = "https://stream4liv.netlify.app/"
+TARGET_URL = "https://hey-lookme.shop/"
 
 async def run():
     print("Starting Data-Matching Scraper with Vercel Proxy Routing...")
