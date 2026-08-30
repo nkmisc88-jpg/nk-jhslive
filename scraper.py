@@ -5,7 +5,7 @@ from playwright.async_api import async_playwright
 TARGET_URL = "https://stream4liv.netlify.app/"
 
 async def run():
-    print("Starting Data-Matching Scraper with Render Proxy Routing...")
+    print("Starting Data-Matching Scraper with Vercel Proxy Routing...")
     
     channel_database = {}
     final_playlist = {}
@@ -14,7 +14,6 @@ async def run():
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
 
-        # 1. Intercept the hidden JSON background APIs to get the working URLs
         async def handle_response(response):
             try:
                 if "application/json" in response.headers.get("content-type", ""):
@@ -41,7 +40,6 @@ async def run():
         await page.goto(TARGET_URL, wait_until="networkidle", timeout=60000)
         await page.wait_for_timeout(4000)
 
-        # 2. Click UI tabs to establish categories
         tabs = await page.query_selector_all("button, .nav-item, li, .category-btn, div.cursor-pointer")
         for tab in tabs:
             try:
@@ -52,7 +50,6 @@ async def run():
                 await tab.click(force=True, timeout=2000)
                 await page.wait_for_timeout(1000)
                 
-                # 3. Read visible text and look up the URL from the intercepted JSON database
                 cards = await page.query_selector_all("a, div[onclick], .card, .channel-item, div.cursor-pointer")
                 for card in cards:
                     visible_text = (await card.inner_text()).strip()
@@ -75,8 +72,7 @@ async def run():
                 
         await browser.close()
 
-    # 4. Generate the final M3U routed through your live Render proxy
-    RENDER_URL = "https://nk-jhslive.onrender.com"
+    VERCEL_URL = "https://nk-jhslive.vercel.app" 
     
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     m3u_lines = [
@@ -88,8 +84,7 @@ async def run():
         logo_attr = f' tvg-logo="{ch["logo"]}"' if ch["logo"] else ""
         m3u_lines.append(f'#EXTINF:-1 group-title="{ch["group"]}"{logo_attr},{ch["name"]}')
         
-        # Wrap the stream URL inside the proxy so Render applies the headers, removing the need for VLC pipes
-        proxied_url = f"{RENDER_URL}/play?url={ch['url']}"
+        proxied_url = f"{VERCEL_URL}/play?url={ch['url']}"
         m3u_lines.append(proxied_url)
 
     with open("playlist.m3u", "w", encoding="utf-8") as f:
