@@ -7,7 +7,7 @@ REFERER_HEADER = "https://stream4liv.netlify.app/"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 async def run():
-    print("Starting Data-Matching Scraper...")
+    print("Starting Data-Matching Scraper with Pipe Syntax...")
     
     channel_database = {}
     final_playlist = {}
@@ -77,7 +77,7 @@ async def run():
                 
         await browser.close()
 
-    # 4. Generate the final M3U
+    # 4. Generate the final M3U using standard Android IPTV pipe syntax
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     m3u_lines = [
         '#EXTM3U x-tvg-url="https://raw.githubusercontent.com/epg.xml"',
@@ -87,12 +87,20 @@ async def run():
     for ch in final_playlist.values():
         logo_attr = f' tvg-logo="{ch["logo"]}"' if ch["logo"] else ""
         m3u_lines.append(f'#EXTINF:-1 group-title="{ch["group"]}"{logo_attr},{ch["name"]}')
-        m3u_lines.append(f'#EXTVLCOPT:http-user-agent={USER_AGENT}')
-        m3u_lines.append(f'#EXTVLCOPT:http-referrer={REFERER_HEADER}')
-        m3u_lines.append(ch["url"])
+        
+        # Append headers directly to the URL string using pipe syntax
+        header_string = f"|User-Agent={USER_AGENT}&Referer={REFERER_HEADER}"
+        
+        # Ensure we don't append it twice if the URL already contains a pipe
+        if "|" not in ch["url"]:
+            m3u_lines.append(f'{ch["url"]}{header_string}')
+        else:
+            m3u_lines.append(ch["url"])
 
     with open("playlist.m3u", "w", encoding="utf-8") as f:
         f.write("\n".join(m3u_lines) + "\n")
+        
+    print(f"Playlist generated successfully with {len(final_playlist)} channels.")
 
 if __name__ == "__main__":
     asyncio.run(run())
