@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 
 TARGET_URL = "https://stream4liv.netlify.app/"
@@ -7,78 +8,66 @@ REFERER_HEADER = "https://stream4liv.netlify.app/"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 async def run():
-    print("Starting reliable scraper without resource blocking...")
+    print("Starting Playwright + BeautifulSoup Hybrid Scraper...")
     unique_channels = {}
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
-        # Create a proper browser context to mimic a real session
-        context = await browser.new_context(user_agent=USER_AGENT)
-        page = await context.new_page()
+        page = await browser.new_page(user_agent=USER_AGENT)
 
         print(f"Loading {TARGET_URL}...")
-        # Let the page load completely naturally without intercepting/blocking resources
-        await page.goto(TARGET_URL, wait_until="networkidle", timeout=90000)
-        await page.wait_for_timeout(5000) # Give extra time for the JS framework to mount
+        await page.goto(TARGET_URL, wait_until="networkidle", timeout=60000)
+        await page.wait_for_timeout(5000)
 
-        # Find all potential category tabs
-        tabs = await page.query_selector_all("button, .category-btn, .nav-item, li.nav-item, a.nav-link, div.cursor-pointer")
-        
+        # Locate all category tabs
+        tabs = await page.query_selector_all("button, li.nav-item, div.cursor-pointer, .category-btn, .tab")
         valid_tabs = []
         for tab in tabs:
             try:
                 text = (await tab.inner_text()).strip()
-                if text and len(text) < 30 and "Telegram" not in text and "Join" not in text:
+                if text and len(text) < 25 and "Telegram" not in text:
                     valid_tabs.append((tab, text))
             except Exception:
                 continue
 
         if not valid_tabs:
-            print("No category tabs found. Scraping main page as fallback.")
             valid_tabs.append((None, "Live TV"))
 
         for tab, cat_name in valid_tabs:
             print(f"Scraping category: {cat_name}")
             if tab:
                 try:
-                    await tab.click(force=True)
-                    # Wait 3 seconds for the site to fetch and render the new category's channels
-                    await page.wait_for_timeout(3000) 
-                except Exception as e:
-                    print(f"Could not click tab {cat_name}: {e}")
-                    continue
-
-            # Scrape whatever channels are currently visible in the DOM
-            elements = await page.query_selector_all("a, div[onclick], div[data-url], div[data-stream], button[data-link]")
-            
-            for el in elements:
-                try:
-                    # Check all possible attribute variations the site might use
-                    href = (
-                        await el.get_attribute("href") or
-                        await el.get_attribute("data-url") or
-                        await el.get_attribute("data-stream") or
-                        await el.get_attribute("data-link")
-                    )
-                    
-                    if href and any(ext in href.lower() for ext in [".m3u8", ".mpd", "token=", "live", "jio"]):
-                        name = (await el.inner_text()).strip().split("\n")[0]
-                        if not name:
-                            name = "Live Channel"
-                            
-                        img = await el.query_selector("img")
-                        logo = await img.get_attribute("src") if img else ""
-                        
-                        # Save the channel to the exact category tab we just clicked
-                        if href not in unique_channels:
-                            unique_channels[href] = {
-                                "name": name,
-                                "group": cat_name,
-                                "logo": logo,
-                                "url": href
-                            }
+                    await tab.click(force=True, timeout=3000)
+                    await page.wait_for_timeout(3000) # Wait for UI to stabilize
                 except Exception:
-                    continue
+                    pass
+            
+            # Extract raw HTML string and parse offline to avoid DOM detachment
+            html_content = await page.content()
+            soup = BeautifulSoup(html_content, "html.parser")
+            
+            # Search for any element containing stream links
+            elements = soup.find_all(lambda tag: tag.has_attr('href') or tag.has_attr('data-url') or tag.has_attr('data-stream') or tag.has_attr('data-link'))
+
+            for el in elements:
+                href = el.get('href') or el.get('data-url') or el.get('data-stream') or el.get('data-link')
+                
+                if href and any(ext in href for ext in [".m3u8", ".mpd", "token=", "live", "jio"]):
+                    # Extract the first visible string as the channel name
+                    name_strings = list(el.stripped_strings)
+                    name = name_strings[0] if name_strings else "Live Channel"
+                    
+                    img = el.find('img')
+                    logo = img['src'] if img and img.has_attr('src') else ""
+
+                    # Map channel to the current category tab
+                    if href not in unique_channels:
+                        unique_channels[href] = {
+                            "name": name,
+                            "group": cat_name,
+                            "logo": logo,
+                            "url": href
+                        }
 
         await browser.close()
 
