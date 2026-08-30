@@ -3,6 +3,11 @@ import requests
 
 app = Flask(__name__)
 
+# This new route prevents the 404 error when you visit the main link
+@app.route('/')
+def home():
+    return "Render Proxy is Live and Running!", 200
+
 @app.route('/play')
 def play():
     # The URL of the actual stream passed from your M3U playlist
