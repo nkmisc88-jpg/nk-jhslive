@@ -3,18 +3,16 @@ import datetime
 from playwright.async_api import async_playwright
 
 TARGET_URL = "https://stream4liv.netlify.app/"
-REFERER_HEADER = "https://stream4liv.netlify.app/"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 async def run():
-    print("Starting Data-Matching Scraper with Pipe Syntax...")
+    print("Starting Data-Matching Scraper with Render Proxy Routing...")
     
     channel_database = {}
     final_playlist = {}
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page(user_agent=USER_AGENT)
+        page = await browser.new_page(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
 
         # 1. Intercept the hidden JSON background APIs to get the working URLs
         async def handle_response(response):
@@ -77,7 +75,9 @@ async def run():
                 
         await browser.close()
 
-    # 4. Generate the final M3U using standard Android IPTV pipe syntax
+    # 4. Generate the final M3U routed through your live Render proxy
+    RENDER_URL = "https://nk-jhslive.onrender.com"
+    
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     m3u_lines = [
         '#EXTM3U x-tvg-url="https://raw.githubusercontent.com/epg.xml"',
@@ -88,14 +88,9 @@ async def run():
         logo_attr = f' tvg-logo="{ch["logo"]}"' if ch["logo"] else ""
         m3u_lines.append(f'#EXTINF:-1 group-title="{ch["group"]}"{logo_attr},{ch["name"]}')
         
-        # Append headers directly to the URL string using pipe syntax
-        header_string = f"|User-Agent={USER_AGENT}&Referer={REFERER_HEADER}"
-        
-        # Ensure we don't append it twice if the URL already contains a pipe
-        if "|" not in ch["url"]:
-            m3u_lines.append(f'{ch["url"]}{header_string}')
-        else:
-            m3u_lines.append(ch["url"])
+        # Wrap the stream URL inside the proxy so Render applies the headers, removing the need for VLC pipes
+        proxied_url = f"{RENDER_URL}/play?url={ch['url']}"
+        m3u_lines.append(proxied_url)
 
     with open("playlist.m3u", "w", encoding="utf-8") as f:
         f.write("\n".join(m3u_lines) + "\n")
