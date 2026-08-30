@@ -7,59 +7,69 @@ REFERER_HEADER = "https://stream4liv.netlify.app/"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 async def run():
-    print("Starting comprehensive scraper...")
+    print("Starting reliable scraper without resource blocking...")
     unique_channels = {}
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page(user_agent=USER_AGENT)
-
-        # Block heavy resources for speed, allowing JS/XHR through
-        async def route_intercept(route):
-            if route.request.resource_type in ["image", "media", "font"]:
-                await route.abort()
-            else:
-                await route.continue_()
-        
-        await page.route("**/*", route_intercept)
+        # Create a proper browser context to mimic a real session
+        context = await browser.new_context(user_agent=USER_AGENT)
+        page = await context.new_page()
 
         print(f"Loading {TARGET_URL}...")
-        await page.goto(TARGET_URL, wait_until="networkidle", timeout=60000)
-        await page.wait_for_timeout(3000)
+        # Let the page load completely naturally without intercepting/blocking resources
+        await page.goto(TARGET_URL, wait_until="networkidle", timeout=90000)
+        await page.wait_for_timeout(5000) # Give extra time for the JS framework to mount
 
-        # Find all category tabs/buttons
-        tabs = await page.query_selector_all("button, .nav-link, .tab, .category-btn, ul li, .cursor-pointer")
+        # Find all potential category tabs
+        tabs = await page.query_selector_all("button, .category-btn, .nav-item, li.nav-item, a.nav-link, div.cursor-pointer")
         
+        valid_tabs = []
         for tab in tabs:
             try:
-                cat_name = (await tab.inner_text()).strip()
-                # Filter out useless or non-category buttons
-                if not cat_name or len(cat_name) > 30 or "Telegram" in cat_name or "Join" in cat_name:
-                    continue
-                
-                print(f"Scraping category: {cat_name}")
-                await tab.click(force=True, timeout=2000)
-                await page.wait_for_timeout(1500) # Wait for JS to render the channels
+                text = (await tab.inner_text()).strip()
+                if text and len(text) < 30 and "Telegram" not in text and "Join" not in text:
+                    valid_tabs.append((tab, text))
+            except Exception:
+                continue
 
-                # Extract channels using robust selectors that catch hidden attributes
-                cards = await page.query_selector_all("a, div[onclick], .channel-card, .card, div.cursor-pointer")
-                for card in cards:
-                    # Fallback through all possible URL attributes the site might use
+        if not valid_tabs:
+            print("No category tabs found. Scraping main page as fallback.")
+            valid_tabs.append((None, "Live TV"))
+
+        for tab, cat_name in valid_tabs:
+            print(f"Scraping category: {cat_name}")
+            if tab:
+                try:
+                    await tab.click(force=True)
+                    # Wait 3 seconds for the site to fetch and render the new category's channels
+                    await page.wait_for_timeout(3000) 
+                except Exception as e:
+                    print(f"Could not click tab {cat_name}: {e}")
+                    continue
+
+            # Scrape whatever channels are currently visible in the DOM
+            elements = await page.query_selector_all("a, div[onclick], div[data-url], div[data-stream], button[data-link]")
+            
+            for el in elements:
+                try:
+                    # Check all possible attribute variations the site might use
                     href = (
-                        await card.get_attribute("href") or 
-                        await card.get_attribute("data-url") or 
-                        await card.get_attribute("data-stream") or
-                        await card.get_attribute("data-link")
+                        await el.get_attribute("href") or
+                        await el.get_attribute("data-url") or
+                        await el.get_attribute("data-stream") or
+                        await el.get_attribute("data-link")
                     )
                     
-                    if href and any(ext in href for ext in [".m3u8", ".mpd", "token=", "live", "jio", "ts"]):
-                        name = (await card.inner_text()).strip().split("\n")[0]
+                    if href and any(ext in href.lower() for ext in [".m3u8", ".mpd", "token=", "live", "jio"]):
+                        name = (await el.inner_text()).strip().split("\n")[0]
                         if not name:
                             name = "Live Channel"
                             
-                        img = await card.query_selector("img")
+                        img = await el.query_selector("img")
                         logo = await img.get_attribute("src") if img else ""
-
+                        
+                        # Save the channel to the exact category tab we just clicked
                         if href not in unique_channels:
                             unique_channels[href] = {
                                 "name": name,
@@ -67,34 +77,14 @@ async def run():
                                 "logo": logo,
                                 "url": href
                             }
-            except Exception:
-                continue
-
-        # Safety Fallback: If tab clicking failed, scrape the main view
-        if not unique_channels:
-            print("Tab routing failed. Scraping main view fallback...")
-            cards = await page.query_selector_all("a, div[onclick], .channel-card, .card")
-            for card in cards:
-                href = (
-                    await card.get_attribute("href") or 
-                    await card.get_attribute("data-url") or 
-                    await card.get_attribute("data-stream")
-                )
-                if href and any(ext in href for ext in [".m3u8", ".mpd", "token=", "live", "jio"]):
-                    name = (await card.inner_text()).strip().split("\n")[0] or "Live Channel"
-                    if href not in unique_channels:
-                        unique_channels[href] = {
-                            "name": name,
-                            "group": "Live TV",
-                            "logo": "",
-                            "url": href
-                        }
+                except Exception:
+                    continue
 
         await browser.close()
 
-    print(f"Extraction complete. Total unique channels found: {len(unique_channels)}")
+    print(f"Total unique channels found: {len(unique_channels)}")
 
-    # Generate M3U
+    # Generate M3U formatting
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     m3u_lines = [
         '#EXTM3U x-tvg-url="https://raw.githubusercontent.com/epg.xml"',
