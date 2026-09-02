@@ -1,5 +1,5 @@
 #EXTM3U x-tvg-url="https://raw.githubusercontent.com/epg.xml"
-# Playlist Last Updated: 2026-09-02 07:22:36
+# Playlist Last Updated: 2026-09-02 13:01:49
 #EXTINF:-1 group-title="STREAMLIVE" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/CNBCTV18Prime.png",CNBC TV18 Prime
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/CNBCTV18Prime_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="STREAMLIVE" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsHD.png",Colors HD
@@ -274,8 +274,6 @@ https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Ze
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeKannadaHD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeTeluguHD.png",Zee Telugu HD
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeTeluguHD_MOB/WDVLive/index.mpd
-#EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeBanglaHD.png",Zee Bangla HD
-https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeBanglaHD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeMarathi.png",Zee Marathi
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeMarathi_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Zee_Purvaiya.png",Zee Bihar Jharkhand
@@ -1182,6 +1180,8 @@ https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/24
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/TV9_Bangla_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="BENGALI" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Tribe_TV.png",KTV Bangla
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Tribe_TV_MOB/WDVLive/index.mpd
+#EXTINF:-1 group-title="BENGALI" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeBanglaHD.png",Zee Bangla HD
+https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeBanglaHD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="BENGALI" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/raatdinbangla.png",Raatdin Bangla
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/raatdinbangla/HLSPartner/index.m3u8
 #EXTINF:-1 group-title="BENGALI" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/U_Bangla.png",U Bangla
