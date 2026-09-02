@@ -1,5 +1,5 @@
 #EXTM3U x-tvg-url="https://raw.githubusercontent.com/epg.xml"
-# Playlist Last Updated: 2026-09-02 01:33:59
+# Playlist Last Updated: 2026-09-02 07:22:36
 #EXTINF:-1 group-title="STREAMLIVE" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/CNBCTV18Prime.png",CNBC TV18 Prime
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/CNBCTV18Prime_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="STREAMLIVE" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsHD.png",Colors HD
