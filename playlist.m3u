@@ -1,5 +1,5 @@
 #EXTM3U x-tvg-url="https://raw.githubusercontent.com/epg.xml"
-# Playlist Last Updated: 2026-09-28 09:01:53
+# Playlist Last Updated: 2026-09-28 17:24:28
 #EXTINF:-1 group-title="STREAMLIVE" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/CNBCTV18Prime.png",CNBC TV18 Prime
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/CNBCTV18Prime_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="STREAMLIVE" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsHD.png",Colors HD
@@ -248,6 +248,8 @@ https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/sa
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ntvtamil/HLSPartner/index.m3u8
 #EXTINF:-1 group-title="TAMIL LOCAL" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/utvtamil.png",Ultimate TV
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/utvtamil/HLSPartner/index.m3u8
+#EXTINF:-1 group-title="TAMIL LOCAL" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/suryatvtamil.png",Suriya TV
+https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/suryatvtamil/HLSPartner/index.m3u8
 #EXTINF:-1 group-title="TAMIL LOCAL" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/subintvtamil.png",Subin TV
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/subintvtamil/HLSPartner/index.m3u8
 #EXTINF:-1 group-title="TAMIL LOCAL" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/dharshantvtamil.png",Dharsan TV
@@ -262,36 +264,36 @@ https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ro
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/aanadhamtvtamil/HLSPartner/index.m3u8
 #EXTINF:-1 group-title="TAMIL LOCAL" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Prime_TV.png",Prime TV
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Prime_TV_MOB/WDVLive/index.mpd
-#EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://img.media.jio.com/tvpimages/5/6/301982_1749665314605_l_medium.jpg",Star Sports 1 Hindi HD
-https://nk-jhslive.vercel.app/play?url=https://jiotvpllive.cdn.jio.com//bpk-tv/Star_Sports_HD1_Hindi_BTS/WDVLive/index.mpd
 #EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://img.media.jio.com/tvpimages/41/51/301983_1749666169105_l_medium.jpg",Star Sports 2 HD
 https://nk-jhslive.vercel.app/play?url=https://jiotvpllive.cdn.jio.com//bpk-tv/Star_Sports_HD2_BTS/WDVLive/index.mpd
 #EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://img.media.jio.com/tvpimages/76/32/301981_1749665664018_l_medium.jpg",Star Sports 1 HD
 https://nk-jhslive.vercel.app/play?url=https://jiotvpllive.cdn.jio.com//bpk-tv/Star_Sports_HD1_BTS/WDVLive/index.mpd
+#EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://img.media.jio.com/tvpimages/5/6/301982_1749665314605_l_medium.jpg",Star Sports 1 Hindi HD
+https://nk-jhslive.vercel.app/play?url=https://jiotvpllive.cdn.jio.com//bpk-tv/Star_Sports_HD1_Hindi_BTS/WDVLive/index.mpd
 #EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Asianet_Plus.png",Asianet Plus
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Asianet_Plus_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Star_Utsav.png",Star Utsav
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Utsav_MOB/WDVLive/index.mpd
-#EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Star_Plus_HD.png",Star Plus HD
-https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Plus_HD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Star_Maa.png",Star Maa
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Maa_MOB/WDVLive/index.mpd
-#EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Maa_Gold.png",Maa Gold
-https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Maa_Gold_MOB/WDVLive/index.mpd
-#EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Asianet_Movies.png",Asianet Movies
-https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Asianet_Movies_MOB/WDVLive/index.mpd
+#EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Star_Plus_HD.png",Star Plus HD
+https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Plus_HD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Jalsha_Movies.png",Jalsha Movies
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Jalsha_Movies_MOB/WDVLive/index.mpd
+#EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Asianet_Movies.png",Asianet Movies
+https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Asianet_Movies_MOB/WDVLive/index.mpd
+#EXTINF:-1 group-title="HOTSTAR" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Maa_Gold.png",Maa Gold
+https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Maa_Gold_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/BigMagic.png",Big Magic
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/BigMagic_MOB/WDVLive/index.mpd
+#EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeBollywood.png",Zee Bollywood
+https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeBollywood_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeClassicSD.png",Zee Classic
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeClassicSD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeAction.png",Zee Action
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeAction_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeKannadaHD.png",Zee Kannada HD
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeKannadaHD_MOB/WDVLive/index.mpd
-#EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeTeluguHD.png",Zee Telugu HD
-https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeTeluguHD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeBanglaHD.png",Zee Bangla HD
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeBanglaHD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="ZEE5" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeMarathi.png",Zee Marathi
@@ -538,8 +540,6 @@ https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/To
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Colors_Cineplex_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="MOVIES" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeCinema.png",Zee Cinema
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeCinema_MOB/WDVLive/index.mpd
-#EXTINF:-1 group-title="MOVIES" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeBollywood.png",Zee Bollywood
-https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeBollywood_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="MOVIES" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Maha_Movies.png",Maha Movies
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Maha_Movies_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="MOVIES" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Star_Gold_Select_HD.png",Star Gold Select HD
@@ -950,6 +950,8 @@ https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/So
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Aastha_Telugu_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="TELUGU" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Studio_One.png",Studio One
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/Studio_One_MOB/WDVLive/index.mpd
+#EXTINF:-1 group-title="TELUGU" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeTeluguHD.png",Zee Telugu HD
+https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeTeluguHD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="TELUGU" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ZeeCinemaluHD.png",Zee Cinemalu HD
 https://nk-jhslive.vercel.app/play?url=https://jiotvmblive.cdn.jio.com/bpk-tv/ZeeCinemaluHD_MOB/WDVLive/index.mpd
 #EXTINF:-1 group-title="TELUGU" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Studio_Yuva_Alpha.png",Studio Yuva Alpha
